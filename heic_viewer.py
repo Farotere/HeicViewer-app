@@ -147,6 +147,7 @@ class HeicViewer(QMainWindow):
             self.open_heic_file(sys.argv[1])
     
     def setup_shortcuts(self):
+        # Raccourcis de zoom
         zoom_in_shortcut = QShortcut(QKeySequence.StandardKey.ZoomIn, self)
         zoom_in_shortcut.activated.connect(self.zoom_in_shortcut)
         zoom_out_shortcut = QShortcut(QKeySequence.StandardKey.ZoomOut, self)
@@ -155,11 +156,16 @@ class HeicViewer(QMainWindow):
         zoom_in_plus_shortcut.activated.connect(self.zoom_in_shortcut)
         zoom_out_minus_shortcut = QShortcut(QKeySequence("Ctrl+-"), self)
         zoom_out_minus_shortcut.activated.connect(self.zoom_out_shortcut)
+        
+        # Utiliser QShortcut à la place de QAction pour les touches directionnelles
+        # afin d'éviter les conflits "Ambiguous shortcut overload"
         next_image_shortcut = QShortcut(QKeySequence("Right"), self)
         next_image_shortcut.activated.connect(self.next_image)
+        next_image_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
         
         prev_image_shortcut = QShortcut(QKeySequence("Left"), self)
         prev_image_shortcut.activated.connect(self.prev_image)
+        prev_image_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
         
         gallery_shortcut = QShortcut(QKeySequence("Ctrl+G"), self)
         gallery_shortcut.activated.connect(self.view_all_images)

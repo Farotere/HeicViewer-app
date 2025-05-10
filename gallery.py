@@ -25,7 +25,7 @@ class ImageGalleryDialog(QDialog):
         # Mettre à jour le titre avec le nombre d'images
         self.setWindowTitle(f"Galerie d'images - {len(image_files)} images")
         
-        # Définir le style sombre de la boîte de dialogue - élimination de toutes couleurs claires
+        # Appliquer le thème sombre à la fenêtre de recherche
         self.setStyleSheet("""
             QDialog {
                 background-color: #232323;

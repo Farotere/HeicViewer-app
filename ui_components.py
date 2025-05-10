@@ -13,13 +13,15 @@ def create_menu(window):
     search_action.triggered.connect(window.show_heic_finder)
     file_menu.addAction(search_action)
     file_menu.addSeparator()
+    
+    # Modifier les raccourcis des actions pour éviter les conflits
     next_action = QAction("Image &suivante", window)
-    next_action.setShortcut("Right")
+    # Ne pas définir de raccourci ici, on utilise QShortcut dans setup_shortcuts()
     next_action.triggered.connect(window.next_image)
     file_menu.addAction(next_action)
     
     prev_action = QAction("Image &précédente", window)
-    prev_action.setShortcut("Left")
+    # Ne pas définir de raccourci ici, on utilise QShortcut dans setup_shortcuts()
     prev_action.triggered.connect(window.prev_image)
     file_menu.addAction(prev_action)
     
