@@ -7,13 +7,13 @@ from PyQt6.QtWidgets import (QMainWindow, QLabel, QScrollArea,
 from PyQt6.QtCore import Qt, QStandardPaths, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QKeySequence, QShortcut, QIcon
 
-from ui_components import create_menu, create_toolbar
-from image_processing import load_image
-from utils import show_about_dialog, show_association_dialog, create_file_association
-from gallery import ImageGalleryDialog
-from heic_finder import show_heic_finder as show_finder_dialog
-from data_manager import HeicDataManager
-from viewer_utils import get_relative_position, adjust_scroll_position
+from src.ui.components.ui_components import create_menu, create_toolbar
+from src.core.image_processing import load_image
+from src.utils.file_utils import show_about_dialog, show_association_dialog, create_file_association
+from src.ui.components.gallery import ImageGalleryDialog
+from src.ui.components.heic_finder import show_heic_finder as show_finder_dialog
+from src.core.data_manager import HeicDataManager
+from src.core.viewer_utils import get_relative_position, adjust_scroll_position
 
 class HeicViewer(QMainWindow):
     def __init__(self):

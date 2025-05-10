@@ -8,8 +8,8 @@ from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLa
 from PyQt6.QtCore import Qt, QStandardPaths, pyqtSignal, QSize, QTimer
 from PyQt6.QtGui import QIcon, QPixmap
 
-from image_processing import load_image
-from data_manager import HeicDataManager
+from src.core.image_processing import load_image
+from src.core.data_manager import HeicDataManager
 
 
 class SearchResultItem(QTreeWidgetItem):

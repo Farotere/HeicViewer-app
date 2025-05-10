@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QPushButton,
 from PyQt6.QtCore import Qt, QSize, QTimer
 from PyQt6.QtGui import QIcon
 
-from image_processing import load_image
-from data_manager import HeicDataManager
+from src.core.image_processing import load_image
+from src.core.data_manager import HeicDataManager
 
 class ImageGalleryDialog(QDialog):
     """Dialogue affichant une galerie de toutes les images disponibles"""
