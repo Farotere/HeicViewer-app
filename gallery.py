@@ -25,6 +25,77 @@ class ImageGalleryDialog(QDialog):
         # Mettre à jour le titre avec le nombre d'images
         self.setWindowTitle(f"Galerie d'images - {len(image_files)} images")
         
+        # Définir le style sombre de la boîte de dialogue - élimination de toutes couleurs claires
+        self.setStyleSheet("""
+            QDialog {
+                background-color: #232323;
+            }
+            QLabel {
+                color: #E0E0E0;
+                background-color: transparent;
+            }
+            QCheckBox {
+                color: #E0E0E0;
+                background-color: transparent;
+            }
+            QCheckBox::indicator {
+                width: 16px;
+                height: 16px;
+                background-color: #4A4A4A;
+                border: 1px solid #606060;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #5A5A5A;
+                image: url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>);
+            }
+            QPushButton {
+                background-color: #353535;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+                border-radius: 4px;
+                padding: 5px 15px;
+            }
+            QPushButton:hover {
+                background-color: #454545;
+            }
+            QPushButton:pressed {
+                background-color: #252525;
+            }
+            QScrollArea {
+                background-color: #232323;
+                border: 1px solid #363636;
+            }
+            QScrollArea > QWidget > QWidget {
+                background-color: #232323;
+            }
+            QScrollBar {
+                background-color: #2A2A2A;
+                width: 12px;
+                height: 12px;
+            }
+            QScrollBar::handle {
+                background-color: #404040;
+                border-radius: 4px;
+            }
+            QScrollBar::handle:hover {
+                background-color: #505050;
+            }
+            QScrollBar::add-page, QScrollBar::sub-page {
+                background-color: #2A2A2A;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line {
+                background-color: #2A2A2A;
+            }
+            QMessageBox {
+                background-color: #303030;
+            }
+            QToolTip {
+                background-color: #404040;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+            }
+        """)
+        
         self.setup_ui()
         
     def setup_ui(self):
@@ -33,6 +104,7 @@ class ImageGalleryDialog(QDialog):
         # Ajout d'un label d'information en haut
         info_frame = QFrame()
         info_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        info_frame.setStyleSheet("background-color: #404040; border: 1px solid #505050;")
         info_layout = QHBoxLayout(info_frame)
         
         if self.current_index >= 0 and self.current_index < len(self.image_files):
@@ -98,18 +170,23 @@ class ImageGalleryDialog(QDialog):
         # Créer un conteneur pour la miniature et son numéro
         frame = QFrame()
         frame_layout = QVBoxLayout(frame)
-        frame_layout.setContentsMargins(2, 2, 2, 2)
+        frame_layout.setContentsMargins(3, 3, 3, 3)
+        frame_layout.setSpacing(2)
+        
+        # Définir le style de base du cadre
+        frame.setFrameShape(QFrame.Shape.StyledPanel)
+        frame.setFrameShadow(QFrame.Shadow.Raised)
+        frame.setLineWidth(1)
         
         # Ajouter un label pour le numéro
         num_label = QLabel(f"{index + 1}")
         num_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        num_label.setStyleSheet("font-weight: bold;")
-        frame_layout.addWidget(num_label)
         
         # Créer le bouton pour l'image
         button = QPushButton()
         button.setToolTip(f"{index + 1} - {os.path.basename(image_path)}")
         button.setFixedSize(self.thumbnail_size, self.thumbnail_size)
+        button.setFlat(True)  # Bouton plat pour un meilleur rendu visuel
         
         # Chargement et redimensionnement de la miniature
         try:
@@ -120,15 +197,75 @@ class ImageGalleryDialog(QDialog):
                 Qt.TransformationMode.SmoothTransformation
             )
             button.setIcon(QIcon(pixmap))
-            button.setIconSize(QSize(self.thumbnail_size - 10, self.thumbnail_size - 10))
+            button.setIconSize(QSize(self.thumbnail_size - 12, self.thumbnail_size - 12))
+            
+            # Appliquer un style différent si c'est l'image courante
             if index == self.current_index:
-                button.setStyleSheet("border: 3px solid blue; background-color: #E0E0FF;")
-                frame.setStyleSheet("background-color: #E0E0FF;")
+                # Style pour l'image sélectionnée - conserve le gris sombre avec accent bleu
+                frame.setStyleSheet("""
+                    QFrame {
+                        background-color: #383840;
+                        border: 2px solid #6080B0;
+                        border-radius: 6px;
+                    }
+                """)
+                num_label.setStyleSheet("""
+                    QLabel {
+                        font-weight: bold;
+                        color: #90A0D0;
+                        font-size: 10pt;
+                        background-color: #383840;
+                    }
+                """)
+                button.setStyleSheet("""
+                    QPushButton {
+                        background-color: #383840;
+                        border: 1px solid #505060;
+                        border-radius: 4px;
+                    }
+                    QPushButton:hover {
+                        background-color: #404050;
+                    }
+                """)
+            else:
+                # Style normal - gris sombre
+                frame.setStyleSheet("""
+                    QFrame {
+                        background-color: #404040;
+                        border: 1px solid #505050;
+                        border-radius: 4px;
+                    }
+                    QFrame:hover {
+                        border: 1px solid #606060;
+                        background-color: #454545;
+                    }
+                """)
+                num_label.setStyleSheet("""
+                    QLabel {
+                        font-weight: bold;
+                        color: #B0B0B0;
+                        font-size: 9pt;
+                        background-color: #404040;
+                    }
+                """)
+                button.setStyleSheet("""
+                    QPushButton {
+                        background-color: transparent;
+                        border: 1px solid #505050;
+                        border-radius: 2px;
+                    }
+                    QPushButton:hover {
+                        background-color: #505050;
+                        border: 1px solid #606060;
+                    }
+                """)
                 
         except Exception as e:
             button.setText(os.path.basename(image_path))
+        
         button.clicked.connect(lambda: self.select_image(image_path))
         
+        frame_layout.addWidget(num_label)
         frame_layout.addWidget(button)
         
         return frame
@@ -141,12 +278,6 @@ class ImageGalleryDialog(QDialog):
     def on_close(self):
         """Gère la fermeture du dialogue en sauvegardant les images si demandé"""
         if self.save_checkbox.isChecked() and self.image_files:
-            # Sauvegarder les images pour une utilisation future
+            # Sauvegarder les images pour une utilisation future sans afficher de notification
             success = self.data_manager.add_search_result(self.image_files)
-            if success and len(self.image_files) > 5:  # Notification seulement si nombre significatif
-                QMessageBox.information(
-                    self, 
-                    "Images sauvegardées", 
-                    f"{len(self.image_files)} images ont été sauvegardées et seront disponibles lors de la prochaine ouverture."
-                )
         self.reject()

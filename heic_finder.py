@@ -50,6 +50,121 @@ class HeicFinderDialog(QDialog):
         self.thumbnail_size = 32
         self.save_results = True
         self.data_manager = HeicDataManager()
+        
+        # Appliquer le thème sombre à la fenêtre de recherche
+        self.setStyleSheet("""
+            QDialog {
+                background-color: #232323;
+            }
+            QLabel {
+                color: #E0E0E0;
+                background-color: transparent;
+            }
+            QCheckBox {
+                color: #E0E0E0;
+                background-color: transparent;
+            }
+            QCheckBox::indicator {
+                background-color: #353535;
+                border: 1px solid #505050;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #404060;
+            }
+            QPushButton {
+                background-color: #353535;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+                border-radius: 4px;
+                padding: 5px 15px;
+            }
+            QPushButton:hover {
+                background-color: #454545;
+            }
+            QPushButton:pressed {
+                background-color: #252525;
+            }
+            QLineEdit {
+                background-color: #353535;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+                border-radius: 3px;
+                padding: 3px;
+            }
+            QComboBox {
+                background-color: #353535;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+                border-radius: 3px;
+                padding: 3px;
+            }
+            QComboBox::drop-down {
+                background-color: #404040;
+            }
+            QComboBox::down-arrow {
+                width: 14px;
+                height: 14px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #353535;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+                selection-background-color: #404050;
+            }
+            QFrame {
+                background-color: #333333;
+                border: 1px solid #404040;
+            }
+            QProgressBar {
+                border: 1px solid #505050;
+                background-color: #353535;
+                text-align: center;
+                color: #E0E0E0;
+                border-radius: 3px;
+            }
+            QProgressBar::chunk {
+                background-color: #405060;
+                width: 10px;
+            }
+            QTreeWidget {
+                background-color: #303030;
+                color: #E0E0E0;
+                border: 1px solid #404040;
+                alternate-background-color: #353535;
+            }
+            QTreeWidget::item:selected {
+                background-color: #404050;
+                color: #FFFFFF;
+            }
+            QHeaderView::section {
+                background-color: #404040;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+            }
+            QScrollBar {
+                background-color: #2A2A2A;
+                width: 12px;
+                height: 12px;
+            }
+            QScrollBar::handle {
+                background-color: #404040;
+                border-radius: 4px;
+            }
+            QScrollBar::handle:hover {
+                background-color: #505050;
+            }
+            QScrollBar::add-page, QScrollBar::sub-page {
+                background-color: #2A2A2A;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line {
+                background-color: #2A2A2A;
+            }
+            QToolTip {
+                background-color: #404040;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+            }
+        """)
 
         self.setup_ui()
     

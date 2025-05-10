@@ -32,6 +32,99 @@ class HeicViewer(QMainWindow):
         self.using_search_results = False
         self.data_manager = HeicDataManager()
         
+        # Appliquer le thème sombre à l'application principale
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #232323;
+            }
+            QLabel {
+                color: #E0E0E0;
+                background-color: transparent;
+            }
+            QStatusBar {
+                background-color: #303030;
+                color: #E0E0E0;
+                border-top: 1px solid #404040;
+            }
+            QMenuBar {
+                background-color: #303030;
+                color: #E0E0E0;
+                border-bottom: 1px solid #404040;
+            }
+            QMenuBar::item {
+                background-color: #303030;
+                color: #E0E0E0;
+            }
+            QMenuBar::item:selected {
+                background-color: #404050;
+            }
+            QMenu {
+                background-color: #303030;
+                color: #E0E0E0;
+                border: 1px solid #404040;
+            }
+            QMenu::item:selected {
+                background-color: #404050;
+            }
+            QToolBar {
+                background-color: #303030;
+                border: 1px solid #404040;
+            }
+            QToolButton {
+                background-color: #303030;
+                color: #E0E0E0;
+                border: 1px solid #303030;
+                border-radius: 2px;
+                padding: 3px;
+            }
+            QToolButton:hover {
+                background-color: #404040;
+                border: 1px solid #505050;
+            }
+            QToolButton:pressed {
+                background-color: #252525;
+            }
+            QScrollArea {
+                background-color: #232323;
+                border: 1px solid #363636;
+            }
+            QScrollBar {
+                background-color: #2A2A2A;
+                width: 12px;
+                height: 12px;
+            }
+            QScrollBar::handle {
+                background-color: #404040;
+                border-radius: 4px;
+            }
+            QScrollBar::handle:hover {
+                background-color: #505050;
+            }
+            QScrollBar::add-page, QScrollBar::sub-page {
+                background-color: #2A2A2A;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line {
+                background-color: #2A2A2A;
+            }
+            QMessageBox {
+                background-color: #303030;
+            }
+            QToolTip {
+                background-color: #404040;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+            }
+            QFileDialog {
+                background-color: #303030;
+                color: #E0E0E0;
+            }
+            QHeaderView::section {
+                background-color: #404040;
+                color: #E0E0E0;
+                border: 1px solid #505050;
+            }
+        """)
+        
         self.init_ui()
         self.setup_shortcuts()
         self.load_saved_images()
@@ -155,7 +248,9 @@ class HeicViewer(QMainWindow):
             result = dialog.exec()
             
             if result == QDialog.DialogCode.Accepted and dialog.selected_image_path:
+                self.is_fit_to_window = True
                 self.open_heic_file(dialog.selected_image_path)
+                self.fit_to_window()
                 self.using_search_results = True
                 
         elif self.image_files:
@@ -164,7 +259,9 @@ class HeicViewer(QMainWindow):
             result = dialog.exec()
             
             if result == QDialog.DialogCode.Accepted and dialog.selected_image_path:
+                self.is_fit_to_window = True
                 self.open_heic_file(dialog.selected_image_path)
+                self.fit_to_window()
         else:
             QMessageBox.information(self, "Information", "Aucune image HEIC disponible.")
     
@@ -245,8 +342,12 @@ class HeicViewer(QMainWindow):
             scale_w = scroll_area_size.width() / original_size.width()
             scale_h = scroll_area_size.height() / original_size.height()
             self.current_scale = min(scale_w, scale_h)
+            if self.current_scale > 2.0:
+                self.current_scale = 2.0
+            target_width = int(original_size.width() * self.current_scale)
+            target_height = int(original_size.height() * self.current_scale)
             scaled_pixmap = self.current_pixmap.scaled(
-                scroll_area_size,
+                target_width, target_height,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation
             )
