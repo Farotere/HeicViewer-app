@@ -350,13 +350,41 @@ class HeicViewer(QMainWindow):
             self.current_scale = min(scale_w, scale_h)
             if self.current_scale > 2.0:
                 self.current_scale = 2.0
+            
+            # Modification pour améliorer la qualité sur Windows
             target_width = int(original_size.width() * self.current_scale)
             target_height = int(original_size.height() * self.current_scale)
-            scaled_pixmap = self.current_pixmap.scaled(
-                target_width, target_height,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            )
+            
+            # Utiliser la meilleure qualité de transformation disponible
+            # et un facteur de sur-échantillonnage pour Windows
+            if sys.platform == "win32":
+                # Sur Windows, on utilise une image intermédiaire plus grande pour ensuite la réduire
+                # Ce qui donne un meilleur résultat visuel (suréchantillonnage)
+                oversample_factor = 1.5
+                intermediate_width = int(target_width * oversample_factor)
+                intermediate_height = int(target_height * oversample_factor)
+                
+                # Créer une version intermédiaire avec suréchantillonnage
+                intermediate_pixmap = self.current_pixmap.scaled(
+                    intermediate_width, intermediate_height,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+                
+                # Réduire à la taille cible avec transformation douce
+                scaled_pixmap = intermediate_pixmap.scaled(
+                    target_width, target_height,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+            else:
+                # Pour les autres plateformes, utiliser la méthode standard
+                scaled_pixmap = self.current_pixmap.scaled(
+                    target_width, target_height,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+            
             self.display_pixmap(scaled_pixmap)
             self.status_bar.showMessage(f"Zoom: {int(self.current_scale * 100)}% (ajusté à la fenêtre)")
     
